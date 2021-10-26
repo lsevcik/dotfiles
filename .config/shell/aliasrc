@@ -1,0 +1,55 @@
+#!/bin/sh
+
+# Use neovim for vim if present.
+[ -x "$(command -v nvim)" ] && alias vim="nvim" vimdiff="nvim -d"
+
+# Refresh sudo session
+alias sudo='sudo -v; sudo '
+
+for cmd in mount umount pacman apt; do
+	alias $cmd="sudo ${cmd}"
+done; unset command
+
+# Verbosity and settings that you pretty much just always are going to want.
+alias \
+	cp="cp -iv" \
+	mv="mv -iv" \
+	rm="rm -vI" \
+	mkd="mkdir -pv" \
+	yt="youtube-dl --add-metadata -i" \
+	yta="yt -x -f bestaudio/best" \
+	ffmpeg="ffmpeg -hide_banner" \
+	info='info --vi-keys' \
+	gdb="gdb -q" \
+	tmux="tmux -f ${XDG_CONFIG_HOME:-$HOME/.config}/tmux/tmux.conf"
+
+# Colorize commands when possible.
+alias \
+	ls="ls -hN --color=auto --group-directories-first" \
+	grep="grep --color=auto" \
+	diff="diff --color=auto"
+
+[ -x "$(command -v highlight)" ] && ccat="highlight --out-format=ansi | less --quit-if-one-screen"
+[ -x "$(command -v bat)" ] && ccat="bat"
+
+# These common commands are just too long! Abbreviate them.
+alias \
+	ka="killall" \
+	g="git" \
+	hn="homebrew" \
+	trem="transmission-remote" \
+	YT="youtube-viewer" \
+	sdn="sudo shutdown -h now" \
+	f="$FILE" \
+	e="$EDITOR" \
+	v="$EDITOR" \
+	p="sudo pacman"
+
+if [[ "$UNAME" == *"Linux"* ]]; then
+	alias open="systemd-run -dq --user xdg-open"
+fi
+
+alias \
+	magit="nvim -c MagitOnly" \
+	ref="shortcuts >/dev/null; source ${XDG_CONFIG_HOME:-$HOME/.config}/shortcutrc ; source ${XDG_CONFIG_HOME:-$HOME/.config}/zshnameddirrc" \
+    dotfiles='git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
