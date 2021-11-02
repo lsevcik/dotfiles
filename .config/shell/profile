@@ -7,6 +7,10 @@ UNAME="$(uname -s)"
 export UNAME
 
 # Use GNU Coreutils on macOS
+if [ "$UNAME" = "Darwin" ] && [ -d "/usr/local/opt/diffutils/bin" ]; then
+	export PATH="/usr/local/opt/diffutils/bin:$PATH"
+fi
+
 if [ "$UNAME" = "Darwin" ] && [ -d "/usr/local/opt/coreutils/libexec/gnubin" ]; then
 	export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
 fi
