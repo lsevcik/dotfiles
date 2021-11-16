@@ -8,24 +8,29 @@ export UNAME
 
 # Use GNU Coreutils on macOS
 if [ "$UNAME" = "Darwin" ] && [ -d "/usr/local/opt/diffutils/bin" ]; then
-	export PATH="/usr/local/opt/diffutils/bin:$PATH"
+    export PATH="/usr/local/opt/diffutils/bin:$PATH"
 fi
 
 if [ "$UNAME" = "Darwin" ] && [ -d "/usr/local/opt/coreutils/libexec/gnubin" ]; then
-	export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+    export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
 fi
 
 # Adds `~/.local/bin` to $PATH
 if [ -d "$HOME/.local/bin" ]; then
-    PATH=$PATH$( find "$HOME/.local/bin" -type d | awk '{  printf ":%s", $1; }' )
+    PATH="$PATH$( find "$HOME/.local/bin" -type d | awk '{  printf ":%s", $1; }' )"
     export PATH
+fi
+
+# Add RubyGems to path
+if which ruby >/dev/null && which gem >/dev/null; then
+    PATH="$PATH:$(ruby -r rubygems -e 'puts Gem.user_dir')/bin"
 fi
 
 # Default editor:
 if [ -x "$(command -v nvim)" ]; then
     export EDITOR="nvim"
-elif [ -x "$(command -v vim)" ]; then
-    export EDITOR="vim"
+elif [ -x "$(command -v vi)" ]; then
+    export EDITOR="vi"
 fi
 
 # Use GnuPG as ssh-agent & clean up gpg home
