@@ -1,4 +1,4 @@
-# Luke's lf settings
+# Logan's lf settings
 
 # Basic vars
 set shell bash
@@ -9,17 +9,16 @@ set icons
 set period 1
 set hiddenfiles ".*:*.aux:*.log:*.bbl:*.bcf:*.blg:*.run.xml"
 
-# Vars that depend on environmental variables
-$lf -remote "send $id set previewer ${XDG_CONFIG_HOME:-$HOME/.config}/lf/scope"
+set previewer .config/lf/scope
 
 # cmds/functions
 cmd open ${{
-    if [ -z "$DISPLAY" ]; then
+    if [ -z "${DISPLAY:-}" ]; then
         $EDITOR $fx;
     fi
     case $(file --mime-type $f -b) in
         text/*) $EDITOR $fx;;
-        *) for f in $fx; do setsid -f $OPENER $f >/dev/null 2>&1; done;;
+        *) for f in $fx; do open $fx 2>&1; done;;
     esac
 }}
 
