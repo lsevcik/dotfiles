@@ -9,17 +9,25 @@ set icons
 set period 1
 set hiddenfiles ".*:*.aux:*.log:*.bbl:*.bcf:*.blg:*.run.xml"
 
-set previewer .config/lf/scope
+set previewer .lf-scope
 
 # cmds/functions
 cmd open ${{
+    shopt -s expand_aliases
     if [ -z "${DISPLAY:-}" ]; then
         $EDITOR $fx;
+    else
+        case $(file --mime-type $f -b) in
+            text/*) $EDITOR $fx;;
+            *) for f in $fx; do
+                if [ -x /usr/bin/systemd-run ]; then
+                    systemd-run -dq --user -- xdg-open $fx
+                else
+                    open $fx 2>&1
+                fi
+               done;;
+        esac
     fi
-    case $(file --mime-type $f -b) in
-        text/*) $EDITOR $fx;;
-        *) for f in $fx; do open $fx 2>&1; done;;
-    esac
 }}
 
 cmd mkdir $mkdir -p "$(echo $* | tr ' ' '\ ')"
