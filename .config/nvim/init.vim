@@ -10,13 +10,17 @@ endif
 call plug#begin(system('echo -n "${XDG_CONFIG_HOME:-$HOME/.config}/nvim/plugged"'))
 Plug 'ap/vim-css-color'
 Plug 'jreybert/vimagit'
-Plug 'neovim/nvim-lspconfig'
+if has('nvim-0.5.0')
+    Plug 'neovim/nvim-lspconfig'
+endif
 Plug 'preservim/nerdtree'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'vim-airline/vim-airline'
 Plug 'vimwiki/vimwiki'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+if executable('node')
+    Plug 'neoclide/coc.nvim', {'branch': 'release'}
+endif
 Plug 'ryanoasis/vim-devicons'
 call plug#end()
 
@@ -138,9 +142,13 @@ endfunction
 nnoremap <leader>m :call ToggleHiddenAll()<CR>
 
 " LSP Server Configs
+if has('nvim-0.5')
 lua << EOF
-require'lspconfig'.clangd.setup{}
+if vim.api.nvim_eval("executable('clangd')") then
+    require'lspconfig'.clangd.setup{}
+end
 EOF
+endif
 
 inoremap <silent><expr> <TAB>
       \ pumvisible() ? "\<C-n>" :
