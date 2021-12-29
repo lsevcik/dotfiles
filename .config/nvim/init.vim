@@ -21,6 +21,8 @@ Plug 'vimwiki/vimwiki'
 if executable('node')
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
 endif
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }}
+Plug 'tpope/vim-sleuth'
 Plug 'ryanoasis/vim-devicons'
 call plug#end()
 
