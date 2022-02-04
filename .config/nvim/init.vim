@@ -7,6 +7,11 @@ if ! filereadable(system('echo -n "${XDG_CONFIG_HOME:-$HOME/.config}/nvim/autolo
 	autocmd VimEnter * PlugInstall
 endif
 
+" Run PlugInstall if there are missing plugins
+autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+  \| PlugInstall --sync | source $MYVIMRC
+\| endif
+
 call plug#begin(system('echo -n "${XDG_CONFIG_HOME:-$HOME/.config}/nvim/plugged"'))
 Plug 'ap/vim-css-color'
 Plug 'jreybert/vimagit'
@@ -17,7 +22,6 @@ Plug 'preservim/nerdtree'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
 Plug 'vim-airline/vim-airline'
-Plug 'vimwiki/vimwiki'
 if executable('node')
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
 endif
@@ -28,8 +32,7 @@ call plug#end()
 
 " Terminal settings
 	set title
-	set bg=light
-	set go=ad
+	set bg=dark
 	set mouse=a
 	set clipboard+=unnamedplus
 	set noshowmode
@@ -99,14 +102,17 @@ call plug#end()
 	nnoremap S :%s//g<Left><Left>
 
 " Open corresponding .pdf/.html or preview
-	map <leader>p :!opout <c-r>%<CR><CR>
+	map <leader>p :!open <c-r>%<CR><CR>
+
+" Toggle wrapping
+	nnoremap <leader>w :setlocal wrap!<Enter>
 
 " Ensure files are read as what I want:
 	" let g:vimwiki_ext2syntax = {'.Rmd': 'markdown', '.rmd': 'markdown','.md': 'markdown', '.markdown': 'markdown', '.mdown': 'markdown'}
 	" map <leader>w :VimwikiIndex
 	" let g:vimwiki_list = [{'path': '~/vimwiki', 'syntax': 'markdown', 'ext': '.md'}]
-	" autocmd BufRead,BufNewFile *.ms,*.me,*.mom,*.man set filetype=groff
-	" autocmd BufRead,BufNewFile *.tex set filetype=tex
+	autocmd BufRead,BufNewFile *.ms,*.me,*.mom,*.man set filetype=groff
+	autocmd BufRead,BufNewFile *.tex set filetype=tex
 
 " Save file as sudo on files that require root permission
 	cnoremap w!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!

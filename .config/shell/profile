@@ -10,25 +10,27 @@ export UNAME
 if [ "$UNAME" = "Darwin" ] && [ -d "/usr/local/opt/diffutils/bin" ]; then
     export PATH="/usr/local/opt/diffutils/bin:$PATH"
 fi
-
 if [ "$UNAME" = "Darwin" ] && [ -d "/usr/local/opt/coreutils/libexec/gnubin" ]; then
     export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
 fi
 
 # Adds `~/.local/bin` to $PATH
 if [ -d "$HOME/.local/bin" ]; then
-    PATH="$PATH$( find "$HOME/.local/bin" -type d | awk '{  printf ":%s", $1; }' )"
+    PATH="$PATH$(find "$HOME/.local/bin" -type d | awk '{  printf ":%s", $1; }')"
     export PATH
 fi
 
 # Add RubyGems to path
-if which ruby >/dev/null && which gem >/dev/null; then
-    PATH="$PATH:$(ruby -r rubygems -e 'puts Gem.user_dir')/bin"
+if [ -d "$HOME/.gem/ruby" ]; then
+    PATH="$PATH$(find "$HOME/.gem/ruby" -type d -depth 1 | awk '{  printf ":%s/bin", $1; }')"
+    export PATH
 fi
 
 # Default editor:
 if [ -x "$(command -v nvim)" ]; then
     export EDITOR="nvim"
+elif [ -x "$(command -v vim)" ]; then
+    export EDITOR="vim"
 elif [ -x "$(command -v vi)" ]; then
     export EDITOR="vi"
 fi
@@ -59,7 +61,6 @@ if [ -z "$XDG_RUNTIME_DIR" ]; then
 fi
 
 export ZDOTDIR="${XDG_CONFIG_HOME:-$HOME/.config}/zsh"
-#export XAUTHORITY="$XDG_RUNTIME_DIR/Xauthority" # This line will break some DMs.
 export GTK2_RC_FILES="${XDG_CONFIG_HOME:-$HOME/.config}/gtk-2.0/gtkrc-2.0"
 export LESSHISTFILE="-"
 export WGETRC="${XDG_CONFIG_HOME:-$HOME/.config}/wget/wgetrc"
@@ -92,4 +93,4 @@ LESS_TERMCAP_ue="$(printf '%b' '[0m')"
 export LESS_TERMCAP_ue
 export LESSOPEN="| highlight -O ansi %s 2>/dev/null"
 
-[ ! -f "${XDG_CONFIG_HOME:-$HOME/.config}/shell/shortcutrc" ] && shortcuts >/dev/null 2>&1 &
+[ ! -f "${XDG_CONFIG_HOME:-$HOME/.config}/shell/shortcutrc" ] && .shortcuts >/dev/null 2>&1 &
