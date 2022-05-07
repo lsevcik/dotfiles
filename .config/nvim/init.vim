@@ -13,21 +13,32 @@ autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
 \| endif
 
 call plug#begin(system('echo -n "${XDG_CONFIG_HOME:-$HOME/.config}/nvim/plugged"'))
+" SYNTAX HIGHLIGHTING
 Plug 'ap/vim-css-color'
-Plug 'jreybert/vimagit'
+Plug 'nvim-treesitter/nvim-treesitter'
+Plug 'sheerun/vim-polyglot'
+
+" LANGUAGE SUPPORT
 if has('nvim-0.5.0')
     Plug 'neovim/nvim-lspconfig'
 endif
-Plug 'preservim/nerdtree'
-Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-surround'
-Plug 'vim-airline/vim-airline'
 if executable('node')
     Plug 'neoclide/coc.nvim', {'branch': 'release'}
 endif
-Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }}
+
+" QoL
+Plug 'jreybert/vimagit'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-sleuth'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-unimpaired'
+
+" UI
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }}
+Plug 'preservim/nerdtree'
 Plug 'ryanoasis/vim-devicons'
+Plug 'vim-airline/vim-airline'
 call plug#end()
 
 " Terminal settings
@@ -55,7 +66,6 @@ call plug#end()
 	set shiftwidth=4
 	set autoindent
 	set expandtab " tab = spaces
-	" set cc=80 " 80 column limit
 	" let g:airline_powerline_fonts = 1
 
 " Search settings
@@ -150,14 +160,17 @@ endfunction
 nnoremap <leader>m :call ToggleHiddenAll()<CR>
 
 " LSP Server Configs
+" TODO: setup more languages
 if has('nvim-0.5')
 lua << EOF
 if vim.api.nvim_eval("executable('clangd')") then
     require'lspconfig'.clangd.setup{}
+    require('lspconfig/quick_lint_js').setup {}
 end
 EOF
 endif
 
+" COC
 inoremap <silent><expr> <TAB>
       \ pumvisible() ? "\<C-n>" :
       \ <SID>check_back_space() ? "\<TAB>" :

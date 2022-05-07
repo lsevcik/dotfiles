@@ -44,27 +44,27 @@ if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
 fi
 
 # ~/ Clean-up:
-if [ -z "$XDG_CACHE_HOME" ]; then
-    export XDG_CACHE_HOME="$HOME/.cache"
+if [ -z "$XDG_CONFIG_HOME" ]; then
+    export XDG_CONFIG_HOME="$HOME/.config"
 fi
 
 if [ -z "$XDG_DATA_HOME" ]; then
     export XDG_DATA_HOME="$HOME/.local/share"
 fi
 
-if [ -z "$XDG_CONFIG_HOME" ]; then
-    export XDG_CONFIG_HOME="$HOME/.config"
+if [ -z "$XDG_CACHE_HOME" ]; then
+    export XDG_CACHE_HOME="$HOME/.cache"
 fi
 
 if [ -z "$XDG_RUNTIME_DIR" ]; then
     export XDG_RUNTIME_DIR="$XDG_CACHE_HOME"
 fi
 
-export ZDOTDIR="${XDG_CONFIG_HOME:-$HOME/.config}/zsh"
 export GTK2_RC_FILES="${XDG_CONFIG_HOME:-$HOME/.config}/gtk-2.0/gtkrc-2.0"
 export LESSHISTFILE="-"
 export WGETRC="${XDG_CONFIG_HOME:-$HOME/.config}/wget/wgetrc"
 export INPUTRC="${XDG_CONFIG_HOME:-$HOME/.config}/shell/inputrc"
+export ZDOTDIR="${XDG_CONFIG_HOME:-$HOME/.config}/zsh"
 export WINEPREFIX="${XDG_DATA_HOME:-$HOME/.local/share}/wineprefixes/default"
 export TMUX_TMPDIR="${XDG_RUNTIME_DIR}"
 export CARGO_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/cargo"
@@ -76,6 +76,7 @@ export SQLITE_HISTORY="${XDG_CACHE_HOME:-$HOME/.cache}/sqlite_history"
 
 # Other program settings:
 export FZF_DEFAULT_OPTS="--layout=reverse --height 40%"
+export SYSTEMD_LESS="j.25MqRSW#.25"
 export LESS=-R
 LESS_TERMCAP_mb="$(printf '%b' '[1;31m')"
 export LESS_TERMCAP_mb
