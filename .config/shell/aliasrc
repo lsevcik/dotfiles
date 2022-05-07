@@ -6,28 +6,21 @@
 # Refresh sudo session
 alias sudo='sudo -v; sudo '
 
-for cmd in mount umount pacman apt; do
-	alias $cmd="sudo ${cmd}"
-done; unset command
-
 # Verbosity and settings that you pretty much just always are going to want.
 alias \
-	cp="cp -iv" \
+	cp="cp -iv --reflink=auto --sparse=auto" \
 	mv="mv -iv" \
 	rm="rm -vI" \
-	mkd="mkdir -pv" \
-	yt="youtube-dl --add-metadata -i" \
-	yta="yt -x -f bestaudio/best" \
+	mkdir="mkdir -pv" \
+	youtube-dl="youtube-dl --add-metadata -i" \
 	ffmpeg="ffmpeg -hide_banner" \
+	ls="ls -hN --color=auto --group-directories-first" \
+	grep="grep --color=auto" \
+	diff="diff --color=auto" \
+	ip="ip -color=auto"
 	info='info --vi-keys' \
 	gdb="gdb -q" \
 	tmux="tmux -f ${XDG_CONFIG_HOME:-$HOME/.config}/tmux/tmux.conf"
-
-# Colorize commands when possible.
-alias \
-	ls="ls -hN --color=auto --group-directories-first" \
-	grep="grep --color=auto" \
-	diff="diff --color=auto"
 
 [ -x "$(command -v highlight)" ] && ccat="highlight --out-format=ansi | less --quit-if-one-screen"
 [ -x "$(command -v bat)" ] && ccat="bat"
@@ -36,20 +29,20 @@ alias \
 alias \
 	ka="killall" \
 	g="git" \
-	hn="homebrew" \
-	trem="transmission-remote" \
-	YT="youtube-viewer" \
-	sdn="sudo shutdown -h now" \
+	sdn="shutdown -h now"
 	f="$FILE" \
 	e="$EDITOR" \
-	v="$EDITOR" \
-	p="sudo pacman"
+	v="$EDITOR"
+	mkd="mkdir" \
+	yt="youtube-dl" \
 
 if [[ "$UNAME" == *"Linux"* ]]; then
 	alias open="systemd-run -dq --user xdg-open"
 fi
 
+# Advanced aliases
 alias \
+	dotfiles='git --git-dir=$HOME/.dotfiles --work-tree=$HOME' \
 	magit="nvim -c MagitOnly" \
 	ref="shortcuts >/dev/null; source ${XDG_CONFIG_HOME:-$HOME/.config}/shortcutrc ; source ${XDG_CONFIG_HOME:-$HOME/.config}/zshnameddirrc" \
-    dotfiles='git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
+	yta="yt -x -f bestaudio/best"
