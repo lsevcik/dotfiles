@@ -165,7 +165,7 @@ if has('nvim-0.5')
 lua << EOF
 if vim.api.nvim_eval("executable('clangd')") then
     require'lspconfig'.clangd.setup{}
-    require('lspconfig/quick_lint_js').setup {}
+    require('lspconfig').quick_lint_js.setup {}
 end
 EOF
 endif
