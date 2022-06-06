@@ -1,4 +1,4 @@
-let mapleader =","
+let mapleader = ","
 
 if ! filereadable(system('echo -n "${XDG_CONFIG_HOME:-$HOME/.config}/nvim/autoload/plug.vim"'))
 	echo "Downloading junegunn/vim-plug to manage plugins..."
@@ -27,6 +27,7 @@ if executable('node')
 endif
 
 " QoL
+Plug 'farmergreg/vim-lastplace'
 Plug 'jreybert/vimagit'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-eunuch'
@@ -162,22 +163,29 @@ nnoremap <leader>m :call ToggleHiddenAll()<CR>
 " LSP Server Configs
 " TODO: setup more languages
 if has('nvim-0.5')
-lua << EOF
-if vim.api.nvim_eval("executable('clangd')") then
-    require'lspconfig'.clangd.setup{}
-    require('lspconfig').quick_lint_js.setup {}
+silent lua << EOF
+local servers = { 'clangd', 'quick-lint-js', 'pyright', 'rust_analyzer', 'tsserver' }
+for _, lsp in pairs(servers) do
+  require('lspconfig')[lsp].setup {
+--    on_attach = on_attach,
+    flags = {
+      -- This will be the default in neovim 0.7+
+      debounce_text_changes = 150,
+    }
+  }
 end
 EOF
 endif
 
 " COC
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
+if executable('node')
+	function! s:check_back_space() abort
+	  let col = col('.') - 1
+	  return !col || getline('.')[col - 1]  =~# '\s'
+	endfunction
+	inoremap <silent><expr> <TAB>
+	      \ pumvisible() ? "\<C-n>" :
+	      \ <SID>check_back_space() ? "\<TAB>" :
+	      \ coc#refresh()
+	inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+endif
