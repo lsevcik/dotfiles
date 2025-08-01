@@ -23,7 +23,7 @@ endif
 
 " LANGUAGE SUPPORT
 if has('nvim-0.5.0')
-    Plug 'williamboman/nvim-lsp-installer'
+    Plug 'mason-org/mason.nvim'
     Plug 'neovim/nvim-lspconfig'
     Plug 'hrsh7th/cmp-nvim-lsp'
     Plug 'hrsh7th/cmp-buffer'
@@ -165,6 +165,7 @@ lua << EOF
 require'nvim-treesitter.configs'.setup {
   ensure_installed = "all",
   auto_install = true,
+  ignore_install = { "ipkg" },
   highlight = {
     enable = true,
     additional_vim_regex_highlighting = true,
@@ -248,19 +249,19 @@ lua << EOF
     })
   })
 
-  require("nvim-lsp-installer").setup {}
+  require("mason").setup()
 
-  local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+  local capabilities = require('cmp_nvim_lsp').default_capabilities()
   local servers = {
     'ansiblels',
     'clangd',
     'pyright',
-    'quick_lint_js',
     'rust_analyzer',
-    'tsserver',
+    'ts_ls',
     'vimls',
     'yamlls',
     }
+
   for _, lsp in pairs(servers) do
     require('lspconfig')[lsp].setup {
       on_attach = on_attach,
