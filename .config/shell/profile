@@ -7,11 +7,11 @@ UNAME="$(uname -s)"
 export UNAME
 
 # Use GNU Coreutils on macOS
-if [ "$UNAME" = "Darwin" ] && [ -d "/usr/local/opt/diffutils/bin" ]; then
-    export PATH="/usr/local/opt/diffutils/bin:$PATH"
+if [ "$UNAME" = "Darwin" ] && [ -d "/opt/homebrew/opt/diffutils/bin" ]; then
+    export PATH="/opt/homebrew/opt/diffutils/bin:$PATH"
 fi
-if [ "$UNAME" = "Darwin" ] && [ -d "/usr/local/opt/coreutils/libexec/gnubin" ]; then
-    export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+if [ "$UNAME" = "Darwin" ] && [ -d "/opt/homebrew/opt/coreutils/libexec/gnubin" ]; then
+    export PATH="/opt/homebrew/opt/coreutils/libexec/gnubin:$PATH"
 fi
 
 # Adds `~/.local/bin` to $PATH
@@ -74,6 +74,9 @@ export HISTFILE="${XDG_DATA_HOME:-$HOME/.local/share}/history"
 export KUBECONFIG="${XDG_DATA_HOME:-$HOME/.local/share}/kube"
 export SQLITE_HISTORY="${XDG_CACHE_HOME:-$HOME/.cache}/sqlite_history"
 
+export AWS_CONFIG_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/aws/config"
+export AWS_SHARED_CREDENTIALS_FILE="${XDG_DATA_HOME:-$HOME/.local/share}/aws/credentials"
+
 # Other program settings:
 export FZF_DEFAULT_OPTS="--layout=reverse --height 40%"
 export SYSTEMD_LESS="j.25MqRSW#.25"
@@ -93,5 +96,3 @@ export LESS_TERMCAP_us
 LESS_TERMCAP_ue="$(printf '%b' '[0m')"
 export LESS_TERMCAP_ue
 export LESSOPEN="| highlight -O ansi %s 2>/dev/null"
-
-[ ! -f "${XDG_CONFIG_HOME:-$HOME/.config}/shell/shortcutrc" ] && .shortcuts >/dev/null 2>&1 &
