@@ -1,4 +1,5 @@
-#!/bin/zsh
+#!/bin/sh
+# shellcheck disable=SC2155
 
 # profile file. Runs on login. Environmental variables are set here.
 
@@ -16,7 +17,7 @@ fi
 
 # Adds `~/.local/bin` to $PATH
 if [ -d "$HOME/.local/bin" ]; then
-    PATH="$PATH$(find "$HOME/.local/bin" -type d | awk '{  printf ":%s", $1; }')"
+    PATH="$PATH:$(find "$HOME/.local/bin" -type d | paste -sd ':' -)"
     export PATH
 fi
 
@@ -36,7 +37,7 @@ elif [ -x "$(command -v vi)" ]; then
 fi
 
 # Use GnuPG as ssh-agent & clean up gpg home
-export GNUPGHOME="${XDG_DATA_HOME:-$HOME/.local/share}/gnupg"
+export GNUPGHOME="${XDG_DATA_HOME}/gnupg"
 unset SSH_AGENT_PID
 if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ] && [ -x "$(command -v gpgconf)" ]; then
   SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
@@ -60,27 +61,29 @@ if [ -z "$XDG_RUNTIME_DIR" ]; then
     export XDG_RUNTIME_DIR="$XDG_CACHE_HOME"
 fi
 
-export GTK2_RC_FILES="${XDG_CONFIG_HOME:-$HOME/.config}/gtk-2.0/gtkrc-2.0"
+export GTK2_RC_FILES="${XDG_CONFIG_HOME}/gtk-2.0/gtkrc-2.0"
 export LESSHISTFILE="-"
-export WGETRC="${XDG_CONFIG_HOME:-$HOME/.config}/wget/wgetrc"
-export INPUTRC="${XDG_CONFIG_HOME:-$HOME/.config}/shell/inputrc"
-export ZDOTDIR="${XDG_CONFIG_HOME:-$HOME/.config}/zsh"
-export WINEPREFIX="${XDG_DATA_HOME:-$HOME/.local/share}/wineprefixes/default"
+export WGETRC="${XDG_CONFIG_HOME}/wget/wgetrc"
+export INPUTRC="${XDG_CONFIG_HOME}/shell/inputrc"
+export ZDOTDIR="${XDG_CONFIG_HOME}/zsh"
+export WINEPREFIX="${XDG_DATA_HOME}/wineprefixes/default"
 export TMUX_TMPDIR="${XDG_RUNTIME_DIR}"
-export CARGO_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/cargo"
-export GOPATH="${XDG_DATA_HOME:-$HOME/.local/share}/go"
-export ANSIBLE_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}/ansible/ansible.cfg"
-export HISTFILE="${XDG_DATA_HOME:-$HOME/.local/share}/history"
-export KUBECONFIG="${XDG_DATA_HOME:-$HOME/.local/share}/kube"
-export SQLITE_HISTORY="${XDG_CACHE_HOME:-$HOME/.cache}/sqlite_history"
-
-export AWS_CONFIG_FILE="${XDG_CONFIG_HOME:-$HOME/.config}/aws/config"
-export AWS_SHARED_CREDENTIALS_FILE="${XDG_DATA_HOME:-$HOME/.local/share}/aws/credentials"
+export ANDROID_SDK_HOME="${XDG_CONFIG_HOME}/android"
+export CARGO_HOME="${XDG_DATA_HOME}/cargo"
+export GOPATH="${XDG_DATA_HOME}/go"
+export GOMODCACHE="$XDG_CACHE_HOME/go/mod"
+export ANSIBLE_CONFIG="${XDG_CONFIG_HOME}/ansible/ansible.cfg"
+export HISTFILE="${XDG_DATA_HOME}/history"
+export KUBECONFIG="${XDG_DATA_HOME}/kube"
+export PYTHONSTARTUP="$XDG_CONFIG_HOME/python/pythonrc"
+export SQLITE_HISTORY="${XDG_CACHE_HOME}/sqlite_history"
+export AWS_CONFIG_FILE="${XDG_CONFIG_HOME}/aws/config"
+export AWS_SHARED_CREDENTIALS_FILE="${XDG_DATA_HOME}/aws/credentials"
 
 # Other program settings:
 export FZF_DEFAULT_OPTS="--layout=reverse --height 40%"
 export SYSTEMD_LESS="j.25MqRSW#.25"
-export LESS=-R
+export LESS="R"
 LESS_TERMCAP_mb="$(printf '%b' '[1;31m')"
 export LESS_TERMCAP_mb
 LESS_TERMCAP_md="$(printf '%b' '[1;36m')"
