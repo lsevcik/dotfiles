@@ -37,12 +37,14 @@ alias \
 alias \
 	ka="killall" \
 	g="git" \
-	sdn="shutdown -h now"
+	sdn="shutdown -h now" \
 	f="$FILE" \
 	e="$EDITOR" \
-	v="$EDITOR"
+	v="$EDITOR" \
 	mkd="mkdir" \
 	yt="youtube-dl" \
+	pd="popd" \
+	p="pnpm" \
 
 if [[ "$UNAME" == *"Linux"* ]]; then
 	alias open="systemd-run -dq --user xdg-open"

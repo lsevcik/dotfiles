@@ -87,7 +87,7 @@ bindkey -M vicmd '^e' edit-command-line
 bindkey -M visual '^[[P' vi-delete
 
 # load zoxide for bookmarks
-[ -x $(command -v zoxide) ] && eval "$(zoxide init zsh)"
+[ -x "$(command -v zoxide)" ] && eval "$(zoxide init zsh)"
 
 # Load syntax highlighting; should be last.
 [ -s /usr/share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh ] && source /usr/share/zsh/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
